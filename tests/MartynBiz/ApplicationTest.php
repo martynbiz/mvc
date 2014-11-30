@@ -1,6 +1,6 @@
 <?php
 
-use MartynBiz\Application;
+use MartynBiz\MVC\Application;
 
 /**
 * AppTest
@@ -11,14 +11,14 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     function setUp()
     {
-        $this->viewMock = $this->getMockBuilder('MartynBiz\View')
+        $this->viewMock = $this->getMockBuilder('MartynBiz\MVC\View')
             ->disableOriginalConstructor()
             ->getMock();
     }
     
     public function testClassInstantiates()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $this->assertTrue($app instanceof Application);
     }
@@ -29,7 +29,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         
         $view = $app->service('View');
         
-        $this->assertTrue($view instanceof \MartynBiz\View);
+        $this->assertTrue($view instanceof \MartynBiz\MVC\View);
     }
     
     function testConfigMethodGetsVariable()
@@ -38,14 +38,14 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             'test' => true,
         );
         
-        $app = new MartynBiz\Application($config);
+        $app = new MartynBiz\MVC\Application($config);
         
         $this->assertEquals(true, $app->config('test'));
     }
     
     // function testConfigMethodGetsAllVariablesWhenNoParametersPassed()
     // {
-    //     $app = new MartynBiz\Application(array(
+    //     $app = new MartynBiz\MVC\Application(array(
     //         'test' => true,
     //     ));
         
@@ -57,7 +57,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     function testConfigMethodReturnsNullWhenInvalidNameIsPassed()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $config = $app->config('idontexist');
         
@@ -66,7 +66,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     function testConfigMethodSetsVariableWhenNameAndConfigIsPassed()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $app->config('test', true);
         
@@ -75,7 +75,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     function testConfigMethodSetsMultipleConfigsWhenArrayIsPassed()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $app->config(array(
             'test' => true,
@@ -94,14 +94,14 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             ),
         );
         
-        $app = new MartynBiz\Application($config);
+        $app = new MartynBiz\MVC\Application($config);
         
         $this->assertEquals($testService, $app->service('TestService'));
     }
     
     function testServiceMethodGetsVariableWhenNameAndServiceIsPassed()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $testService = new stdClass();
         
@@ -112,7 +112,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     function testServiceMethodSetsMultipleWhenArrayIsPassed()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $testService = new stdClass();
         
@@ -125,7 +125,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     function testServiceMethodReturnsNullWhenInvalidNameIsPassed()
     {
-        $app = new MartynBiz\Application();
+        $app = new MartynBiz\MVC\Application();
         
         $service = $app->service('idontexist');
         
@@ -135,39 +135,34 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     
     
     
-    // function testEnvironmentMethodReturnsNullWhenInvalidNameIsPassed()
-    // {
-    //     $app = new MartynBiz\Application();
+    function testEnvironmentMethodReturnsNullWhenInvalidNameIsPassed()
+    {
+        $app = new MartynBiz\MVC\Application();
         
-    //     $environment = $app->environment('idontexist');
+        $environment = $app->environment('idontexist');
         
-    //     $this->assertTrue( is_null($environment) );
-    // }
+        $this->assertTrue( is_null($environment) );
+    }
     
-    // function testEnvironmentMethodSetsVariableWhenNameAndEnvironmentIsPassed()
-    // {
-    //     $app = new MartynBiz\Application();
+    function testEnvironmentMethodSetsVariableWhenNameAndEnvironmentIsPassed()
+    {
+        $app = new MartynBiz\MVC\Application();
         
-    //     $app->environment('test', true);
+        $app->environment('test', true);
         
-    //     $this->assertEquals(true, $app->environment('test'));
-    // }
+        $this->assertEquals(true, $app->environment('test'));
+    }
     
-    // function testEnvironmentMethodSetsMultipleEnvironmentsWhenArrayIsPassed()
-    // {
-    //     $app = new MartynBiz\Application();
+    function testEnvironmentMethodSetsMultipleEnvironmentsWhenArrayIsPassed()
+    {
+        $app = new MartynBiz\MVC\Application();
         
-    //     $app->environment(array(
-    //         'test' => true,
-    //     ));
+        $app->environment(array(
+            'test' => true,
+        ));
         
-    //     $this->assertEquals(true, $app->environment('test'));
-    // }
-    
-    
-    
-    
-    
+        $this->assertEquals(true, $app->environment('test'));
+    }
     
     /**
      * @expectedException Exception
@@ -223,36 +218,6 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             'REQUEST_METHOD' => 'GET',
         ));
     }
-    
-    // /**
-    //  * This exception is thrown after route has been found, and action's presence has been confirmed
-    //  * 
-    //  * @expectedException Exception
-    //  */
-    // public function testRunThrowsExceptionWhenViewIsNull()
-    // {
-    //     $config = array(
-    //         // we must set a valid route to pass to the next stage
-    //         'routes' => array(
-    //             '/home' => array(
-    //                 'GET' => array(
-    //                     'controller' => 'home',
-    //                     'action' => 'index',
-    //                 ),
-    //             ),
-    //         ),
-    //         'services' => array(
-    //             'controllers.home' => new HomeController(), // defined in bootstrap
-    //         )
-    //     );
-        
-    //     $app = new Application($config);
-        
-    //     $app->run(array(
-    //         'REQUEST_URI' => '/home',
-    //         'REQUEST_METHOD' => 'GET',
-    //     ));
-    // }
     
     /**
      * @expectedException Exception
@@ -321,6 +286,31 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             'REQUEST_METHOD' => 'GET',
         ));
     }
+    
+    
+    
+    
+    
+    function testEnvironmentMethodReturnsPut()
+    {
+        $environment = array(
+            'REQUEST_METHOD' => 'POST',
+            'POST' => array(
+                '_METHOD' => 'PUT'
+            ),
+        );
+        
+        $app = new MartynBiz\MVC\Application(null, $environment);
+        
+        $this->assertEquals('PUT', $app->environment('REQUEST_METHOD'));
+    }
+    
+    
+    
+    
+    
+    
+    
     
     // testRenderIsNotCalledWhenControllerReturnsFalse
     // testRouteMatchedForRequestUriWhenQueryStringPassed e.g. /accounts?start=1

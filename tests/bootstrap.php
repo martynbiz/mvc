@@ -9,7 +9,7 @@ chdir(dirname('../'));
 require 'vendor/autoload.php';
 
 // for testing and mocking controllers
-class HomeController extends MartynBiz\Controller
+class HomeController extends MartynBiz\MVC\Controller
 {
     public function indexAction()
     {
